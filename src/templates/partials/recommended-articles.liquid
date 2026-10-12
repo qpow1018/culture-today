@@ -92,6 +92,8 @@
 
 {% if device == 'pc' %}
 .recommended-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.recommended-card { display: flex; flex-direction: column; }
+.recommended-meta { margin-top: auto; padding-top: 1rem; }
 {% endif %}
 
 {% if device == 'mobile' %}
