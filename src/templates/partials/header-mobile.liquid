@@ -1,3 +1,81 @@
+<style>
+.site-header {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.site-header .site-header-inner {
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .site-brand {
+  color: var(--color-accent);
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header .site-navigation-list {
+  list-style: none;
+  padding: 0;
+}
+
+.site-header .site-navigation a {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.site-header .site-navigation a:hover,
+.site-header .site-navigation a[aria-current] {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+}
+
+.site-header a:focus-visible,
+.site-header button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+.site-header .site-header-inner {
+  width: min(100% - 3rem, 75rem);
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
+
+.site-header .site-brand { font-size: 1.5rem; }
+
+.site-header .menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.site-header .menu-toggle[hidden],
+.site-header .mobile-navigation[hidden] { display: none; }
+
+.site-header .mobile-navigation {
+  border-top: 1px solid var(--color-rule);
+  padding: 0.75rem 1.5rem 1rem;
+}
+
+.site-header .site-navigation a { padding-block: 0.875rem; }
+</style>
+
 <header class="site-header" data-mobile-header>
   <div class="site-header-inner">
     <a class="site-brand" href="/">{{ site.name | escape }}</a>

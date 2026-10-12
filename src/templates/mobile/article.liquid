@@ -1,6 +1,29 @@
 {% layout 'layout' %}
 
 {% block content %}
+  <style>
+/* 페이지 흐름 확인용 스타일. 최종 매체 디자인은 별도로 결정합니다. */
+.flow-page {
+  width: min(100% - 2rem, 48rem);
+  margin-inline: auto;
+  padding-block: 1.5rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  flex: 1;
+}
+
+.flow-page h1,
+.flow-page h2,
+.flow-page h3,
+.flow-page p,
+.flow-page ul {
+  margin-bottom: 1rem;
+}
+
+.flow-body {
+  margin-block: 1.5rem;
+}
+  </style>
   <main class="flow-page">
     <article>
       <header>

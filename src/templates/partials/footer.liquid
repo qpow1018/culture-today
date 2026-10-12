@@ -1,3 +1,69 @@
+<style>
+.site-footer-inner {
+  width: min(100% - 3rem, 75rem);
+  margin-inline: auto;
+}
+
+.site-footer .site-brand {
+  color: var(--color-accent);
+  font-size: 1.875rem;
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-footer a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-rule);
+  margin-top: 3rem;
+}
+
+.site-footer-inner {
+  padding-block: 2.5rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.site-footer-intro p {
+  margin-top: 0.875rem;
+}
+
+.site-footer-project {
+  max-width: 24rem;
+}
+
+.site-footer-project a {
+  display: inline-block;
+  padding-block: 0.625rem;
+  color: var(--color-accent);
+  text-underline-offset: 0.25em;
+}
+
+{% if device == 'pc' %}
+.site-footer-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.site-footer-inner { width: min(100% - 3rem, 62.5rem); }
+{% endif %}
+
+{% if device == 'mobile' %}
+.site-footer-project {
+  margin-top: 1.5rem;
+}
+{% endif %}
+</style>
+
 <footer class="site-footer">
   <div class="site-footer-inner">
     <div class="site-footer-intro">

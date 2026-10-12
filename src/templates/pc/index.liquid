@@ -1,22 +1,26 @@
 {% layout 'layout' %}
 
 {% block content %}
+  <style>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.home-page {
+  flex: 1;
+}
+  </style>
   <main class="home-page">
     <h1 class="visually-hidden">{{ site.name | escape }}</h1>
-    {% render 'featured-articles', featuredArticles: featuredArticles %}
-    {% render 'recommended-articles', recommendedCategories: recommendedCategories %}
-    <div class="flow-page">
-    <h2>카테고리 목록</h2>
-    <ul>
-      {% for category in categories %}
-        <li><a href="/category/{{ category.id | escape }}/">{{ category.name | escape }} 기사 목록</a></li>
-      {% endfor %}
-    </ul>
-    <h2>기사 목록</h2>
-    {% for article in articles %}
-      {% render 'article-card', article: article %}
-    {% endfor %}
-    </div>
+    {% render 'featured-articles', device: 'pc', featuredArticles: featuredArticles %}
+    {% render 'recommended-articles', device: 'pc', recommendedCategories: recommendedCategories %}
+    {% render 'latest-articles', device: 'pc', articles: articles, categories: categories %}
   </main>
   <script src="/assets/scripts/featured-articles.js" defer></script>
   <script src="/assets/scripts/recommended-articles.js" defer></script>

@@ -11,6 +11,6 @@
   <body class="page-mobile">
     {% render 'header-mobile', site: site, categories: categories, currentCategory: currentCategory %}
     {% block content %}{% endblock %}
-    {% render 'footer', site: site %}
+    {% render 'footer', device: 'mobile', site: site %}
   </body>
 </html>

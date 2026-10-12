@@ -1,3 +1,68 @@
+<style>
+.site-header {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.site-header .site-header-inner {
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-header .site-brand {
+  color: var(--color-accent);
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header .site-navigation-list {
+  list-style: none;
+  padding: 0;
+}
+
+.site-header .site-navigation a {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.site-header .site-navigation a:hover,
+.site-header .site-navigation a[aria-current] {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+}
+
+.site-header a:focus-visible,
+.site-header button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+.site-header .site-header-inner {
+  width: min(100% - 3rem, 62.5rem);
+  gap: 3rem;
+  padding-block: 2rem;
+}
+
+.site-header .site-brand { font-size: 1.875rem; }
+
+.site-header .site-navigation-list {
+  display: flex;
+  gap: 2.25rem;
+}
+
+.site-header .site-navigation a {
+  padding-block: 0.75rem;
+  white-space: nowrap;
+}
+</style>
+
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-brand" href="/">{{ site.name | escape }}</a>

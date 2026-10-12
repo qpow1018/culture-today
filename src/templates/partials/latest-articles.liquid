@@ -1,0 +1,113 @@
+<style>
+.latest {
+  width: min(100% - 3rem, 62.5rem);
+  margin: 3.5rem auto;
+  overflow-wrap: anywhere;
+}
+
+.latest > h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+}
+
+.latest-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--color-rule);
+}
+
+.latest-image {
+  flex: 0 0 14rem;
+}
+
+.latest-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.latest-content { min-width: 0; }
+
+.latest-category {
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.latest h3 {
+  margin-top: 0.5rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.latest h3 a {
+  color: var(--color-ink);
+  text-decoration: none;
+}
+
+.latest a:hover { text-decoration: underline; }
+
+.latest-summary {
+  margin-top: 0.75rem;
+  color: var(--color-muted);
+  line-height: 1.65;
+}
+
+.latest-meta {
+  margin-top: 0.75rem;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.latest a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+{% if device == 'mobile' %}
+.latest {
+  width: calc(100% - 2rem);
+  margin-block: 2.5rem;
+}
+
+.latest-item { gap: 1rem; }
+
+.latest-image { flex-basis: 6rem; }
+
+.latest h3 { font-size: 1.125rem; }
+
+.latest-summary { font-size: 0.875rem; }
+{% endif %}
+</style>
+
+<section class="latest" aria-labelledby="latest-heading">
+  <h2 id="latest-heading">최신 기사</h2>
+  <div class="latest-list">
+    {% for article in articles limit: 10 %}
+      {% assign category = categories | where: 'id', article.category | first %}
+      <article class="latest-item">
+        {% if article.image %}
+          <a class="latest-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
+            <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941" loading="lazy">
+          </a>
+        {% endif %}
+        <div class="latest-content">
+          <a class="latest-category" href="/category/{{ category.id | escape }}/">{{ category.name | escape }}</a>
+          <h3><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h3>
+          <p class="latest-summary">{{ article.summary | escape }}</p>
+          <p class="latest-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
