@@ -1,0 +1,27 @@
+<section class="recommended" data-recommended aria-labelledby="recommended-heading">
+  <h2 id="recommended-heading">추천 기사</h2>
+  <div class="recommended-tabs" data-tabs hidden>
+    {% for category in recommendedCategories %}
+      <button type="button" id="recommended-tab-{{ category.id }}" data-tab aria-controls="recommended-panel-{{ category.id }}">{{ category.name | escape }}</button>
+    {% endfor %}
+  </div>
+  {% for category in recommendedCategories %}
+    <div class="recommended-panel" id="recommended-panel-{{ category.id }}" data-panel>
+      <h3 class="recommended-category">{{ category.name | escape }}</h3>
+      <div class="recommended-grid">
+        {% for article in category.articles %}
+          <article class="recommended-card">
+            {% if article.image %}
+              <a class="recommended-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
+                <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941" loading="lazy">
+              </a>
+            {% endif %}
+            <h3><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h3>
+            <p class="recommended-summary">{{ article.summary | escape }}</p>
+            <p class="recommended-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</section>

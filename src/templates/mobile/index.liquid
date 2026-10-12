@@ -4,6 +4,7 @@
   <main class="home-page">
     <h1 class="visually-hidden">{{ site.name | escape }}</h1>
     {% render 'featured-articles', featuredArticles: featuredArticles %}
+    {% render 'recommended-articles', recommendedCategories: recommendedCategories %}
     <div class="flow-page">
     <h2>카테고리 목록</h2>
     <ul>
@@ -18,4 +19,5 @@
     </div>
   </main>
   <script src="/assets/scripts/featured-articles.js" defer></script>
+  <script src="/assets/scripts/recommended-articles.js" defer></script>
 {% endblock %}

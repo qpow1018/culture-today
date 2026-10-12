@@ -3,5 +3,37 @@
     "film-scenes-that-stay",
     "reading-twenty-minutes",
     "small-exhibition-slowly"
-  ]
+  ],
+  "recommendedArticles": {
+    "movie": [
+      "film-scenes-that-stay",
+      "film-subtitles",
+      "film-table",
+      "film-credits"
+    ],
+    "book": [
+      "reading-twenty-minutes",
+      "book-bookmark",
+      "book-first-line",
+      "book-return"
+    ],
+    "exhibition": [
+      "small-exhibition-slowly",
+      "exhibition-label",
+      "exhibition-entrance",
+      "exhibition-color"
+    ],
+    "performance": [
+      "after-the-curtain",
+      "performance-arrival",
+      "performance-light",
+      "performance-gesture"
+    ],
+    "music": [
+      "listening-to-an-album",
+      "music-opening",
+      "music-walk",
+      "music-playlist"
+    ]
+  }
 }

@@ -52,6 +52,17 @@ export async function build() {
     return { ...article, categoryName: categories.find((category) => category.id === article.category).name };
   });
 
+  const recommendedCategories = categories.map((category) => ({
+    ...category,
+    articles: home.recommendedArticles[category.id].map((slug) => {
+      const article = articles.find((article) => article.slug === slug);
+      if (!article || article.category !== category.id) {
+        throw new Error("home.json: " + category.name + " 추천 기사 " + slug + "를 확인해 주세요.");
+      }
+      return article;
+    }),
+  }));
+
   const pages = [];
   for (const device of ["pc", "mobile"]) {
     const engine = new Liquid({
@@ -62,7 +73,7 @@ export async function build() {
       strictVariables: true,
       strictFilters: true,
     });
-    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, currentCategory: "", pageTitle: "메인" }) });
+    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, recommendedCategories, currentCategory: "", pageTitle: "메인" }) });
     for (const category of categories) {
       pages.push({
         path: `${device}/category/${category.id}/index.html`,
