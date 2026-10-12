@@ -9,14 +9,6 @@ export const sourceDirectory = fileURLToPath(new URL("../src/", import.meta.url)
 export const outputDirectory = fileURLToPath(new URL("../dist/", import.meta.url));
 
 export async function build() {
-  const engine = new Liquid({
-    root: `${sourceDirectory}/templates/pages`,
-    layouts: `${sourceDirectory}/templates/layouts`,
-    partials: `${sourceDirectory}/templates/partials`,
-    extname: ".liquid",
-    strictVariables: true,
-    strictFilters: true,
-  });
   const site = JSON.parse(await readFile(`${sourceDirectory}/data/site.json`, "utf8"));
   const categories = JSON.parse(await readFile(`${sourceDirectory}/data/categories.json`, "utf8"));
   const markdown = new MarkdownIt({ html: false });
@@ -54,18 +46,29 @@ export async function build() {
   }
   articles.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
-  const pages = [{ path: "index.html", html: await engine.renderFile("index", { site, categories, articles, pageTitle: "메인" }) }];
-  for (const category of categories) {
-    pages.push({
-      path: `category/${category.id}/index.html`,
-      html: await engine.renderFile("category", { site, category, articles: articles.filter((article) => article.category === category.id), pageTitle: `${category.name} 기사 목록` }),
+  const pages = [];
+  for (const device of ["pc", "mobile"]) {
+    const engine = new Liquid({
+      root: `${sourceDirectory}/templates/${device}`,
+      layouts: `${sourceDirectory}/templates/${device}`,
+      partials: `${sourceDirectory}/templates/partials`,
+      extname: ".liquid",
+      strictVariables: true,
+      strictFilters: true,
     });
-  }
-  for (const article of articles) {
-    pages.push({
-      path: `articles/${article.slug}/index.html`,
-      html: await engine.renderFile("article", { site, article, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
-    });
+    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, pageTitle: "메인" }) });
+    for (const category of categories) {
+      pages.push({
+        path: `${device}/category/${category.id}/index.html`,
+        html: await engine.renderFile("category", { site, category, articles: articles.filter((article) => article.category === category.id), pageTitle: `${category.name} 기사 목록` }),
+      });
+    }
+    for (const article of articles) {
+      pages.push({
+        path: `${device}/articles/${article.slug}/index.html`,
+        html: await engine.renderFile("article", { site, article, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
+      });
+    }
   }
 
   await rm(outputDirectory, { recursive: true, force: true });

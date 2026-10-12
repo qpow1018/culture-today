@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*(Mobile|Android|iPhone|iPad|iPod).*" }],
+      "destination": "/mobile/index.html"
+    },
+    { "source": "/", "destination": "/pc/index.html" },
+    {
+      "source": "/category/:category/",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*(Mobile|Android|iPhone|iPad|iPod).*" }],
+      "destination": "/mobile/category/:category/index.html"
+    },
+    { "source": "/category/:category/", "destination": "/pc/category/:category/index.html" },
+    {
+      "source": "/articles/:slug/",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*(Mobile|Android|iPhone|iPad|iPod).*" }],
+      "destination": "/mobile/articles/:slug/index.html"
+    },
+    { "source": "/articles/:slug/", "destination": "/pc/articles/:slug/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "Vary", "value": "User-Agent" }]
+    }
+  ]
+}

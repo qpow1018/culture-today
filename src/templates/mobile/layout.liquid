@@ -6,13 +6,10 @@
     <title>{{ pageTitle | escape }} | {{ site.name | escape }}</title>
     <link rel="stylesheet" href="/assets/styles/reset.css">
     <link rel="stylesheet" href="/assets/styles/base.css">
-    <link rel="stylesheet" href="/assets/styles/flow.css">
   </head>
-  <body>
-    <header class="flow-header">
-      <a href="/">{{ site.name | escape }}</a>
-    </header>
+  <body class="page-mobile">
+    {% render 'header-mobile', site: site %}
     {% block content %}{% endblock %}
-    <footer class="flow-footer">{{ site.name | escape }} · 개발용 테스트 화면</footer>
+    {% render 'footer', site: site %}
   </body>
 </html>
