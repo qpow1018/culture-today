@@ -1,0 +1,7 @@
+[
+  { "id": "movie", "name": "영화" },
+  { "id": "book", "name": "책" },
+  { "id": "exhibition", "name": "전시" },
+  { "id": "performance", "name": "공연" },
+  { "id": "music", "name": "음악" }
+]

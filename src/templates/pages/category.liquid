@@ -1,0 +1,14 @@
+{% layout 'base' %}
+
+{% block content %}
+  <main class="flow-page">
+    <h1>{{ category.name | escape }} 기사 목록</h1>
+    <p>총 {{ articles.size }}개 기사</p>
+    {% for article in articles %}
+      {% render 'article-card', article: article %}
+    {% else %}
+      <p>아직 등록된 기사가 없습니다.</p>
+    {% endfor %}
+    <a href="/">메인으로 돌아가기</a>
+  </main>
+{% endblock %}

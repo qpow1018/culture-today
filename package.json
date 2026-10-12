@@ -1,0 +1,16 @@
+{
+  "name": "culture-today",
+  "version": "0.1.0",
+  "private": true,
+  "description": "오늘의 문화 — Liquid 기반 문화 매체 퍼블리싱 프로젝트",
+  "devDependencies": {
+    "@11ty/gray-matter": "3.0.0",
+    "liquidjs": "10.30.0",
+    "markdown-it": "14.3.2",
+    "vite": "6.4.4"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev.mjs"
+  }
+}
