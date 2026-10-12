@@ -19,7 +19,8 @@ const server = await createServer({
       server.middlewares.use((request, response, next) => {
         const url = new URL(request.url, "http://localhost");
         const path = url.pathname;
-        if (path !== "/" && !/^\/(category|articles)\/[a-z0-9-]+\/?$/.test(path)) {
+        if (path !== "/" && !/^\/(category|articles)\/[a-z0-9-]+\/?$/.test(path) &&
+            !/^\/category\/[a-z0-9-]+\/page\/(?:[2-9]|[1-9]\d+)\/?$/.test(path)) {
           return next();
         }
         const device = mobilePattern.test(request.headers["user-agent"] ?? "") ? "mobile" : "pc";

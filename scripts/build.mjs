@@ -12,6 +12,7 @@ export async function build() {
   const site = JSON.parse(await readFile(`${sourceDirectory}/data/site.json`, "utf8"));
   const categories = JSON.parse(await readFile(`${sourceDirectory}/data/categories.json`, "utf8"));
   const home = JSON.parse(await readFile(`${sourceDirectory}/data/home.json`, "utf8"));
+  const articleViews = JSON.parse(await readFile(`${sourceDirectory}/data/article-views.json`, "utf8"));
   const markdown = new MarkdownIt({ html: false });
   const articles = [];
   const slugs = new Set();
@@ -63,6 +64,14 @@ export async function build() {
     }),
   }));
 
+  const popularArticles = Object.entries(articleViews).map(([slug, views]) => {
+    const article = articles.find((article) => article.slug === slug);
+    if (!article || !Number.isInteger(views) || views < 0) {
+      throw new Error("article-views.json: " + slug + "의 기사와 샘플 조회수를 확인해 주세요.");
+    }
+    return { ...article, views };
+  }).sort((a, b) => b.views - a.views).slice(0, 5);
+
   const pages = [];
   for (const device of ["pc", "mobile"]) {
     const engine = new Liquid({
@@ -75,15 +84,35 @@ export async function build() {
     });
     pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, recommendedCategories, currentCategory: "", pageTitle: "메인" }) });
     for (const category of categories) {
-      pages.push({
-        path: `${device}/category/${category.id}/index.html`,
-        html: await engine.renderFile("category", { site, categories, category, currentCategory: category.id, articles: articles.filter((article) => article.category === category.id), pageTitle: `${category.name} 기사 목록` }),
-      });
+      const categoryArticles = articles.filter((article) => article.category === category.id);
+      const totalPages = Math.max(1, Math.ceil(categoryArticles.length / 10));
+      const pageLinks = Array.from({ length: totalPages }, (_, index) => ({
+        number: index + 1,
+        url: index === 0 ? `/category/${category.id}/` : `/category/${category.id}/page/${index + 1}/`,
+      }));
+      for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) {
+        const pagination = {
+          total: categoryArticles.length,
+          current: pageNumber,
+          pages: pageLinks,
+          previous: pageNumber > 1 ? pageLinks[pageNumber - 2].url : null,
+          next: pageNumber < totalPages ? pageLinks[pageNumber].url : null,
+        };
+        pages.push({
+          path: `${device}/category/${category.id}/${pageNumber === 1 ? "" : `page/${pageNumber}/`}index.html`,
+          html: await engine.renderFile("category", {
+            site, categories, category, currentCategory: category.id,
+            articles: categoryArticles.slice((pageNumber - 1) * 10, pageNumber * 10),
+            pagination,
+            pageTitle: `${category.name} 기사 목록${pageNumber === 1 ? "" : ` · ${pageNumber}페이지`}`,
+          }),
+        });
+      }
     }
     for (const article of articles) {
       pages.push({
         path: `${device}/articles/${article.slug}/index.html`,
-        html: await engine.renderFile("article", { site, categories, article, currentCategory: article.category, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
+        html: await engine.renderFile("article", { site, categories, article, relatedArticles: articles.filter((candidate) => candidate.category === article.category && candidate.slug !== article.slug).slice(0, 3), popularArticles, currentCategory: article.category, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
       });
     }
   }

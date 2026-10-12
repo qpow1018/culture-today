@@ -12,6 +12,12 @@
     },
     { "source": "/", "destination": "/pc/index.html" },
     {
+      "source": "/category/:category/page/:page/",
+      "has": [{ "type": "header", "key": "user-agent", "value": ".*(Mobile|Android|iPhone|iPad|iPod).*" }],
+      "destination": "/mobile/category/:category/page/:page/index.html"
+    },
+    { "source": "/category/:category/page/:page/", "destination": "/pc/category/:category/page/:page/index.html" },
+    {
       "source": "/category/:category/",
       "has": [{ "type": "header", "key": "user-agent", "value": ".*(Mobile|Android|iPhone|iPad|iPod).*" }],
       "destination": "/mobile/category/:category/index.html"

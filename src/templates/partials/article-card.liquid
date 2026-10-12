@@ -1,8 +1,0 @@
-<article class="flow-card">
-  {% if article.image %}
-    <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}">
-  {% endif %}
-  <h3><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h3>
-  <p>{{ article.summary | escape }}</p>
-  <p>{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
-</article>

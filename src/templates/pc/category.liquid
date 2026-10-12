@@ -1,40 +1,83 @@
 {% layout 'layout' %}
 
 {% block content %}
-  <style>
-/* 페이지 흐름 확인용 스타일. 최종 매체 디자인은 별도로 결정합니다. */
-.flow-page {
-  width: min(100% - 2rem, 48rem);
-  margin-inline: auto;
-  padding-block: 1.5rem;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
+<style>
+.category-page {
+  width: min(100% - 3rem, 62.5rem);
+  margin: 2.5rem auto;
   flex: 1;
+  overflow-wrap: anywhere;
 }
-
-.flow-page h1,
-.flow-page h2,
-.flow-page h3,
-.flow-page p,
-.flow-page ul {
-  margin-bottom: 1rem;
+.category-page .category-heading { margin-bottom: 2rem; }
+.category-page h1 { font-size: 2.5rem; font-weight: 750; letter-spacing: -0.04em; }
+.category-page .category-count { margin-top: 0.75rem; color: var(--color-muted); }
+.category-page .category-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--color-rule);
 }
+.category-page .category-image { flex: 0 0 14rem; }
+.category-page .category-image img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.category-page .category-content { min-width: 0; }
+.category-page h2 { font-size: 1.375rem; font-weight: 700; line-height: 1.45; letter-spacing: -0.025em; }
+.category-page h2 a { color: var(--color-ink); text-decoration: none; }
+.category-page .category-summary { margin-top: 0.75rem; color: var(--color-muted); line-height: 1.65; }
+.category-page .category-meta { margin-top: 0.75rem; color: var(--color-muted); font-size: 0.75rem; line-height: 1.6; }
+.category-page .category-back { display: inline-block; margin-top: 1.5rem; color: var(--color-accent); }
+.category-page a:hover { text-decoration: underline; }
+.category-page a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.category-page .pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+.category-page .pagination a,
+.category-page .pagination span { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0.5rem; color: var(--color-ink); text-decoration: none; }
+.category-page .pagination [aria-current] { background: var(--color-accent); color: #fff; font-weight: 700; }
+.category-page .pagination [aria-disabled] { color: var(--color-muted); }
 
-.flow-card {
-  margin-block: 1.5rem;
-}
+</style>
 
-
-.flow-page { width: min(100% - 3rem, 62.5rem); }
-  </style>
-  <main class="flow-page">
-    <h1>{{ category.name | escape }} 기사 목록</h1>
-    <p>총 {{ articles.size }}개 기사</p>
-    {% for article in articles %}
-      {% render 'article-card', article: article %}
-    {% else %}
-      <p>아직 등록된 기사가 없습니다.</p>
-    {% endfor %}
-    <a href="/">메인으로 돌아가기</a>
-  </main>
+<main class="category-page">
+  <header class="category-heading">
+    <h1>{{ category.name | escape }}</h1>
+    <p class="category-count">총 {{ pagination.total }}개 기사 · {{ pagination.current }} / {{ pagination.pages.size }}페이지</p>
+  </header>
+  {% for article in articles %}
+    <article class="category-item">
+      {% if article.image %}
+        <a class="category-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
+          <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941" loading="lazy">
+        </a>
+      {% endif %}
+      <div class="category-content">
+        <h2><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h2>
+        <p class="category-summary">{{ article.summary | escape }}</p>
+        <p class="category-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
+      </div>
+    </article>
+  {% else %}
+    <p>아직 등록된 기사가 없습니다.</p>
+  {% endfor %}
+  {% if pagination.pages.size > 1 %}
+    <nav class="pagination" aria-label="기사 목록 페이지">
+      {% if pagination.previous %}
+        <a href="{{ pagination.previous | escape }}">이전</a>
+      {% else %}
+        <span aria-disabled="true">이전</span>
+      {% endif %}
+      {% for page in pagination.pages %}
+        {% if page.number == pagination.current %}
+          <span aria-current="page" aria-label="{{ page.number }}페이지">{{ page.number }}</span>
+        {% else %}
+          <a href="{{ page.url | escape }}" aria-label="{{ page.number }}페이지">{{ page.number }}</a>
+        {% endif %}
+      {% endfor %}
+      {% if pagination.next %}
+        <a href="{{ pagination.next | escape }}">다음</a>
+      {% else %}
+        <span aria-disabled="true">다음</span>
+      {% endif %}
+    </nav>
+  {% endif %}
+  <a class="category-back" href="/">메인으로 돌아가기</a>
+</main>
 {% endblock %}

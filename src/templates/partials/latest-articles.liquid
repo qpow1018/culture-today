@@ -80,7 +80,11 @@
   margin-block: 2.5rem;
 }
 
-.latest-item { gap: 1rem; }
+.latest-item { display: block; }
+
+.latest-item-heading { display: flex; align-items: flex-start; gap: 1rem; }
+
+.latest-item-heading > div { min-width: 0; }
 
 .latest-image { flex-basis: 6rem; }
 
@@ -96,6 +100,21 @@
     {% for article in articles limit: 10 %}
       {% assign category = categories | where: 'id', article.category | first %}
       <article class="latest-item">
+        {% if device == 'mobile' %}
+        <div class="latest-item-heading">
+          {% if article.image %}
+            <a class="latest-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
+              <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941" loading="lazy">
+            </a>
+          {% endif %}
+          <div>
+            <a class="latest-category" href="/category/{{ category.id | escape }}/">{{ category.name | escape }}</a>
+            <h3><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h3>
+          </div>
+        </div>
+        <p class="latest-summary">{{ article.summary | escape }}</p>
+        <p class="latest-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
+        {% else %}
         {% if article.image %}
           <a class="latest-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
             <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941" loading="lazy">
@@ -107,6 +126,7 @@
           <p class="latest-summary">{{ article.summary | escape }}</p>
           <p class="latest-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
         </div>
+        {% endif %}
       </article>
     {% endfor %}
   </div>
