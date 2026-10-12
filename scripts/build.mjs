@@ -11,6 +11,7 @@ export const outputDirectory = fileURLToPath(new URL("../dist/", import.meta.url
 export async function build() {
   const site = JSON.parse(await readFile(`${sourceDirectory}/data/site.json`, "utf8"));
   const categories = JSON.parse(await readFile(`${sourceDirectory}/data/categories.json`, "utf8"));
+  const home = JSON.parse(await readFile(`${sourceDirectory}/data/home.json`, "utf8"));
   const markdown = new MarkdownIt({ html: false });
   const articles = [];
   const slugs = new Set();
@@ -45,6 +46,11 @@ export async function build() {
     articles.push({ ...data, image: data.image ?? null, url: `/articles/${data.slug}/`, bodyHtml: markdown.render(content) });
   }
   articles.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const featuredArticles = home.featuredArticles.map((slug) => {
+    const article = articles.find((article) => article.slug === slug);
+    if (!article) throw new Error(`home.json: 주요 기사 ${slug}를 찾을 수 없습니다.`);
+    return { ...article, categoryName: categories.find((category) => category.id === article.category).name };
+  });
 
   const pages = [];
   for (const device of ["pc", "mobile"]) {
@@ -56,7 +62,7 @@ export async function build() {
       strictVariables: true,
       strictFilters: true,
     });
-    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, currentCategory: "", pageTitle: "메인" }) });
+    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, currentCategory: "", pageTitle: "메인" }) });
     for (const category of categories) {
       pages.push({
         path: `${device}/category/${category.id}/index.html`,

@@ -164,6 +164,170 @@ body {
   margin-top: 1.5rem;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.home-page {
+  flex: 1;
+}
+
+.page-pc .site-header-inner,
+.page-pc .site-footer-inner,
+.page-pc .flow-page {
+  width: min(100% - 3rem, 62.5rem);
+}
+
+.featured {
+  position: relative;
+  width: min(100% - 3rem, 62.5rem);
+  margin: 2.5rem auto;
+}
+
+.featured-slide {
+  position: relative;
+  min-height: 30rem;
+  background: var(--color-ink);
+  color: #fff;
+}
+
+.featured-slide[hidden],
+.featured-controls[hidden] {
+  display: none;
+}
+
+.featured-image {
+  position: absolute;
+  inset: 0;
+}
+
+.featured-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 30rem;
+  padding: 6rem 4.5rem 4.5rem;
+  background: linear-gradient(180deg, transparent 15%, rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+  overflow-wrap: anywhere;
+}
+
+.featured-content a {
+  pointer-events: auto;
+  color: inherit;
+  text-decoration: none;
+}
+
+.featured-category {
+  align-self: flex-start;
+  font-weight: 650;
+}
+
+.featured h2 {
+  max-width: 42rem;
+  margin-top: 0.75rem;
+  font-size: 2.5rem;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.featured-summary {
+  max-width: 40rem;
+  margin-top: 1rem;
+  line-height: 1.7;
+}
+
+.featured-meta {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.featured-controls button {
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+}
+
+.featured-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.featured-arrow[data-previous] { left: 0.75rem; }
+.featured-arrow[data-next] { right: 0.75rem; }
+
+.featured-selectors {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+}
+
+.featured-selectors button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+}
+
+.featured-selectors button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.featured-selectors button[aria-current]::after { background: #fff; }
+
+.page-mobile .featured {
+  width: calc(100% - 2rem);
+  margin-block: 1.5rem;
+}
+
+.page-mobile .featured-slide,
+.page-mobile .featured-content { min-height: 28rem; }
+
+.page-mobile .featured-content { padding: 5rem 2.75rem 4rem; }
+.page-mobile .featured h2 { font-size: 1.75rem; }
+.page-mobile .featured-summary { font-size: 0.875rem; }
+.page-mobile .featured-meta { font-size: 0.75rem; }
+.page-mobile .featured-arrow[data-previous] { left: 0; }
+.page-mobile .featured-arrow[data-next] { right: 0; }
+
+.featured a:focus-visible,
+.featured button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
 /* 페이지 흐름 확인용 스타일. 최종 매체 디자인은 별도로 결정합니다. */
 .flow-page {
   width: min(100% - 2rem, 48rem);

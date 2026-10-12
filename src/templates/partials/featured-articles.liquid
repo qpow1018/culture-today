@@ -1,0 +1,30 @@
+{% if featuredArticles.size > 0 %}
+  <section class="featured" data-featured aria-label="주요 기사" aria-roledescription="캐러셀">
+    <div class="featured-slides">
+      {% for article in featuredArticles %}
+        <article class="featured-slide" data-slide role="group" aria-roledescription="슬라이드" aria-label="{{ forloop.index }} / {{ featuredArticles.size }}">
+          {% if article.image %}
+            <a class="featured-image" href="{{ article.url | escape }}" tabindex="-1" aria-hidden="true">
+              <img src="{{ article.image.src | escape }}" alt="{{ article.image.alt | escape }}" width="1672" height="941"{% unless forloop.first %} loading="lazy"{% endunless %}>
+            </a>
+          {% endif %}
+          <div class="featured-content">
+            <a class="featured-category" href="/category/{{ article.category | escape }}/">{{ article.categoryName | escape }}</a>
+            <h2><a href="{{ article.url | escape }}">{{ article.title | escape }}</a></h2>
+            <p class="featured-summary">{{ article.summary | escape }}</p>
+            <p class="featured-meta">{{ article.author | escape }} · <time datetime="{{ article.publishedAt | escape }}">{{ article.publishedAt | escape }}</time></p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="featured-controls" data-controls hidden>
+      <button class="featured-arrow" type="button" data-previous aria-label="이전 주요 기사">‹</button>
+      <button class="featured-arrow" type="button" data-next aria-label="다음 주요 기사">›</button>
+      <div class="featured-selectors" aria-label="주요 기사 선택">
+        {% for article in featuredArticles %}
+          <button type="button" data-select="{{ forloop.index0 }}" aria-label="{{ forloop.index }}번 주요 기사: {{ article.title | escape }}"{% if forloop.first %} aria-current="true"{% endif %}></button>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}

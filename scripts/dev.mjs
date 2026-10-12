@@ -46,6 +46,9 @@ server.watcher.on("all", (_event, path) => {
   if (!path.startsWith(sourceDirectory)) return;
   pendingBuild = pendingBuild
     .then(() => build())
-    .then(() => server.ws.send({ type: "full-reload" }))
+    .then(() => {
+      server.moduleGraph.invalidateAll();
+      server.ws.send({ type: "full-reload" });
+    })
     .catch((error) => console.error(error));
 });
