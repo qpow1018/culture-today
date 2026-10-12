@@ -1,5 +1,11 @@
 {
   "name": "오늘의 문화",
   "lang": "ko",
-  "githubUrl": "https://github.com/qpow1018/culture-today"
+  "githubUrl": "https://github.com/qpow1018/culture-today",
+  "description": "영화·책·전시·공연·음악을 이야기하는 오늘의 문화. 개인 프로젝트 시연을 위한 창작 샘플 기사와 문화 콘텐츠를 소개합니다.",
+  "image": {
+    "src": "/assets/images/film-cinema.webp",
+    "alt": "빈 영화관의 좌석과 밝게 빛나는 스크린"
+  },
+  "url": "https://culture-today.vercel.app/"
 }

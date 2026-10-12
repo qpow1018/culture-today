@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ pageTitle | escape }} | {{ site.name | escape }}</title>
+    {% render 'seo', site: site, pageTitle: pageTitle, seo: seo %}
     <link rel="stylesheet" href="/assets/styles/reset.css">
     <link rel="stylesheet" href="/assets/styles/base.css">
   </head>

@@ -10,6 +10,34 @@ export const outputDirectory = fileURLToPath(new URL("../dist/", import.meta.url
 
 export async function build() {
   const site = JSON.parse(await readFile(`${sourceDirectory}/data/site.json`, "utf8"));
+  const origin = new URL(site.url);
+  if (origin.protocol !== "https:" || origin.pathname !== "/" || origin.search || origin.hash) {
+    throw new Error("site.json: url에는 HTTPS 운영 사이트의 기본 주소를 입력해 주세요.");
+  }
+  const noindex = process.env.VERCEL_ENV === "preview";
+  function createSeo(path, description, article = null) {
+    const url = new URL(path, origin).href;
+    const image = article ? article.image : site.image;
+    const shareImage = image ?? site.image;
+    const articleData = article ? {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      mainEntityOfPage: url,
+      headline: article.title,
+      description: article.summary,
+      datePublished: article.publishedAt,
+      author: { "@type": "Organization", name: article.author },
+      publisher: { "@type": "Organization", name: site.name, url: origin.href },
+      inLanguage: site.lang,
+      articleSection: categories.find((category) => category.id === article.category).name,
+      ...(image ? { image: new URL(image.src, origin).href } : {}),
+    } : null;
+    return {
+      url, description, type: article ? "article" : "website", noindex,
+      image: { url: new URL(shareImage.src, origin).href, alt: shareImage.alt },
+      articleJson: articleData ? JSON.stringify(articleData).replace(/</g, "\\u003c") : null,
+    };
+  }
   const categories = JSON.parse(await readFile(`${sourceDirectory}/data/categories.json`, "utf8"));
   const home = JSON.parse(await readFile(`${sourceDirectory}/data/home.json`, "utf8"));
   const articleViews = JSON.parse(await readFile(`${sourceDirectory}/data/article-views.json`, "utf8"));
@@ -82,7 +110,7 @@ export async function build() {
       strictVariables: true,
       strictFilters: true,
     });
-    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, recommendedCategories, currentCategory: "", pageTitle: "메인" }) });
+    pages.push({ url: "/", path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, featuredArticles, recommendedCategories, currentCategory: "", pageTitle: "영화·책·전시·공연·음악", seo: createSeo("/", site.description) }) });
     for (const category of categories) {
       const categoryArticles = articles.filter((article) => article.category === category.id);
       const totalPages = Math.max(1, Math.ceil(categoryArticles.length / 10));
@@ -99,11 +127,13 @@ export async function build() {
           next: pageNumber < totalPages ? pageLinks[pageNumber].url : null,
         };
         pages.push({
+          url: pageLinks[pageNumber - 1].url,
           path: `${device}/category/${category.id}/${pageNumber === 1 ? "" : `page/${pageNumber}/`}index.html`,
           html: await engine.renderFile("category", {
             site, categories, category, currentCategory: category.id,
             articles: categoryArticles.slice((pageNumber - 1) * 10, pageNumber * 10),
             pagination,
+            seo: createSeo(pageLinks[pageNumber - 1].url, `${category.name} 기사 목록 ${pageNumber}페이지. 오늘의 문화의 ${category.name} 창작 샘플 기사를 최신순으로 소개합니다.`),
             pageTitle: `${category.name} 기사 목록${pageNumber === 1 ? "" : ` · ${pageNumber}페이지`}`,
           }),
         });
@@ -111,8 +141,9 @@ export async function build() {
     }
     for (const article of articles) {
       pages.push({
+        url: article.url,
         path: `${device}/articles/${article.slug}/index.html`,
-        html: await engine.renderFile("article", { site, categories, article, relatedArticles: articles.filter((candidate) => candidate.category === article.category && candidate.slug !== article.slug).slice(0, 3), popularArticles, currentCategory: article.category, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
+        html: await engine.renderFile("article", { site, categories, article, relatedArticles: articles.filter((candidate) => candidate.category === article.category && candidate.slug !== article.slug).slice(0, 3), popularArticles, currentCategory: article.category, category: categories.find((category) => category.id === article.category), pageTitle: article.title, seo: createSeo(article.url, article.summary, article) }),
       });
     }
   }
@@ -128,6 +159,15 @@ export async function build() {
     await mkdir(dirname(path), { recursive: true });
     await writeFile(path, page.html);
   }
+  const publicUrls = [...new Set(pages.map((page) => new URL(page.url, origin).href))];
+  const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    publicUrls.map((url) => `  <url><loc>${url.replace(/&/g, "&amp;")}</loc></url>`).join("\n") +
+    "\n</urlset>\n";
+  await writeFile(`${outputDirectory}/sitemap.xml`, sitemap);
+  await writeFile(`${outputDirectory}/robots.txt`, noindex
+    ? "User-agent: *\nAllow: /\n"
+    : `User-agent: *\nAllow: /\n\nSitemap: ${new URL("/sitemap.xml", origin).href}\n`);
   console.log(`빌드 완료: 기사 ${articles.length}개, 페이지 ${pages.length}개 → dist/`);
 }
 
