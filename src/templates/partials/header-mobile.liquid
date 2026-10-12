@@ -1,4 +1,18 @@
-<header class="flow-header">
-  <a href="/">{{ site.name | escape }}</a>
-  <span>모바일 화면 · 개발 확인용</span>
+<header class="site-header" data-mobile-header>
+  <div class="site-header-inner">
+    <a class="site-brand" href="/">{{ site.name | escape }}</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-navigation" hidden>
+      <svg class="menu-toggle-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
+      <span>메뉴</span>
+    </button>
+  </div>
+  <nav class="site-navigation mobile-navigation" id="mobile-navigation" aria-label="카테고리">
+    <ul class="site-navigation-list">
+      {% for category in categories %}
+        <li><a href="/category/{{ category.id | escape }}/"{% if currentCategory == category.id %} aria-current="true"{% endif %}>{{ category.name | escape }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
 </header>

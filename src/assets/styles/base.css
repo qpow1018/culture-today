@@ -6,27 +6,172 @@
   font-display: swap;
 }
 
+:root {
+  --color-paper: #ffffff;
+  --color-ink: #222222;
+  --color-muted: #666666;
+  --color-accent: #176b4a;
+  --color-rule: #dddddd;
+}
+
 body {
   font-family: "Pretendard Variable", system-ui, -apple-system, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  border-bottom: 1px solid var(--color-rule);
+}
+
+.site-header-inner,
+.site-footer-inner {
+  width: min(100% - 3rem, 75rem);
+  margin-inline: auto;
+}
+
+.site-brand {
+  color: var(--color-accent);
+  font-size: 1.875rem;
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-navigation-list {
+  list-style: none;
+  padding: 0;
+}
+
+.site-navigation a {
+  display: block;
+  color: var(--color-ink);
+  font-weight: 550;
+  text-decoration: none;
+}
+
+.site-navigation a:hover,
+.site-navigation a[aria-current] {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+}
+
+.site-header a:focus-visible,
+.site-header button:focus-visible,
+.site-footer a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 5px;
+}
+
+.page-pc .site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  padding-block: 2rem;
+}
+
+.page-pc .site-navigation-list {
+  display: flex;
+  gap: 2.25rem;
+}
+
+.page-pc .site-navigation a {
+  padding-block: 0.75rem;
+  white-space: nowrap;
+}
+
+.page-mobile .site-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
+
+.page-mobile .site-brand {
+  font-size: 1.5rem;
+}
+
+.page-mobile .menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.page-mobile .menu-toggle[hidden],
+.page-mobile .mobile-navigation[hidden] {
+  display: none;
+}
+
+.page-mobile .mobile-navigation {
+  border-top: 1px solid var(--color-rule);
+  padding: 0.75rem 1.5rem 1rem;
+}
+
+.page-mobile .site-navigation a {
+  padding-block: 0.875rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--color-rule);
+  margin-top: 3rem;
+}
+
+.site-footer-inner {
+  padding-block: 2.5rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.site-footer-intro p {
+  margin-top: 0.875rem;
+}
+
+.site-footer-project {
+  max-width: 24rem;
+}
+
+.site-footer-project a {
+  display: inline-block;
+  padding-block: 0.625rem;
+  color: var(--color-accent);
+  text-underline-offset: 0.25em;
+}
+
+.page-pc .site-footer-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.page-mobile .site-footer-project {
+  margin-top: 1.5rem;
 }
 
 /* 페이지 흐름 확인용 스타일. 최종 매체 디자인은 별도로 결정합니다. */
-.flow-header,
-.flow-footer,
 .flow-page {
   width: min(100% - 2rem, 48rem);
   margin-inline: auto;
   padding-block: 1.5rem;
   line-height: 1.7;
   overflow-wrap: anywhere;
-}
-
-.flow-header {
-  border-bottom: 1px solid #ddd;
-}
-
-.flow-footer {
-  border-top: 1px solid #ddd;
+  flex: 1;
 }
 
 .flow-page h1,

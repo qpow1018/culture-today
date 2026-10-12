@@ -56,17 +56,17 @@ export async function build() {
       strictVariables: true,
       strictFilters: true,
     });
-    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, pageTitle: "메인" }) });
+    pages.push({ path: `${device}/index.html`, html: await engine.renderFile("index", { site, categories, articles, currentCategory: "", pageTitle: "메인" }) });
     for (const category of categories) {
       pages.push({
         path: `${device}/category/${category.id}/index.html`,
-        html: await engine.renderFile("category", { site, category, articles: articles.filter((article) => article.category === category.id), pageTitle: `${category.name} 기사 목록` }),
+        html: await engine.renderFile("category", { site, categories, category, currentCategory: category.id, articles: articles.filter((article) => article.category === category.id), pageTitle: `${category.name} 기사 목록` }),
       });
     }
     for (const article of articles) {
       pages.push({
         path: `${device}/articles/${article.slug}/index.html`,
-        html: await engine.renderFile("article", { site, article, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
+        html: await engine.renderFile("article", { site, categories, article, currentCategory: article.category, category: categories.find((category) => category.id === article.category), pageTitle: article.title }),
       });
     }
   }

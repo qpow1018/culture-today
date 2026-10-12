@@ -1,4 +1,12 @@
-<header class="flow-header">
-  <a href="/">{{ site.name | escape }}</a>
-  <span>PC 화면 · 개발 확인용</span>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-brand" href="/">{{ site.name | escape }}</a>
+    <nav class="site-navigation" aria-label="카테고리">
+      <ul class="site-navigation-list">
+        {% for category in categories %}
+          <li><a href="/category/{{ category.id | escape }}/"{% if currentCategory == category.id %} aria-current="true"{% endif %}>{{ category.name | escape }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
 </header>

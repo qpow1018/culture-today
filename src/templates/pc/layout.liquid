@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/assets/styles/base.css">
   </head>
   <body class="page-pc">
-    {% render 'header-pc', site: site %}
+    {% render 'header-pc', site: site, categories: categories, currentCategory: currentCategory %}
     {% block content %}{% endblock %}
     {% render 'footer', site: site %}
   </body>
